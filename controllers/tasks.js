@@ -1,13 +1,13 @@
 const Task = require("../models/task");
+const asyncWrapper = require("../middleware/async");
 
-const getAllTasks = async (req, res) => {
-  try {
-    const tasks = await Task.find({});
-    res.status(200).json({ tasks });
-  } catch (err) {
-    res.status(500).json({ msg: err });
-  }
-};
+// example of how to use a middleware to refactor getAllTasks function
+// same can be applied to all the controller functions
+const getAllTasks = asyncWrapper(async (req, res) => {
+  const tasks = await Task.find({});
+
+  res.status(200).json({ tasks });
+});
 
 const createTask = async (req, res) => {
   try {
