@@ -7,7 +7,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const app = express();
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // middleware
 app.use(express.static("./public"));
