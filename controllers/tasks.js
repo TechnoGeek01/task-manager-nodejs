@@ -1,5 +1,6 @@
 const Task = require("../models/task");
 const asyncWrapper = require("../middleware/async");
+const { createCustomError } = require("../errors/custom-error");
 
 // example of how to use a middleware to refactor getAllTasks function
 // same can be applied to all the controller functions
@@ -18,13 +19,16 @@ const createTask = async (req, res) => {
   }
 };
 
-const getTask = async (req, res) => {
+const getTask = async (req, res, next) => {
   try {
     const { id: taskID } = req.params;
     const task = await Task.findOne({ _id: taskID });
 
+    // custom error added
+    // same can be applied to all the controller functions
     if (!task) {
-      return res.status(404).json({ msg: `No task with id: ${taskID}` });
+      next(createCustomError(`No task with id : ${taskID}`), 404);
+      return;
     }
 
     res.status(200).json({ task });
